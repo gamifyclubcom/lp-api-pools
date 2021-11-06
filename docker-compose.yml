@@ -1,0 +1,32 @@
+version: "3.4"
+
+services:
+  app:
+    build: .
+    ports:
+      - "${PORT}:${PORT}"
+    restart: always
+    depends_on:
+      - db
+    links:
+      - db
+    networks:
+      - intersola
+    volumes:
+      - ./:/app
+    user: 1000:1000
+  db:
+    image: mongo:4.4
+    ports:
+      - "27020:27017"
+    networks:
+      - intersola
+    volumes:
+      - ./data-dev:/data/db
+    restart: unless-stopped
+    user: 1000:1000
+      # - data:/data/db
+# volumes:
+#   data:
+networks:
+  intersola:
