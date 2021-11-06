@@ -10,7 +10,7 @@ module.exports = {
         HOST: 'http://localhost',
         PORT: 3002,
         MONGODB_URL:
-          'mongodb+srv://root:ONkbEgaivezfZBfa@intersola-dev.7n3tz.mongodb.net/intersola-dev?retryWrites=true&w=majority',
+          'mongodb+srv://root:ONkbEgaivezfZBfa@gamify-dev.7n3tz.mongodb.net/gamify-dev?retryWrites=true&w=majority',
         REDIS_URL: 'redis://127.0.0.1:6379',
         POOL_PROGRAM_ID: 'DJ7QgQehs5iYqqs3dVAPgUitYH8Wn7rYcb6TAD1tCeDe',
         CLUSTER: 'devnet',
@@ -21,7 +21,7 @@ module.exports = {
         HOST: 'http://54.151.154.88',
         PORT: 3002,
         MONGODB_URL:
-          'mongodb+srv://root:ONkbEgaivezfZBfa@intersola-dev.7n3tz.mongodb.net/intersola-dev?retryWrites=true&w=majority',
+          'mongodb+srv://root:ONkbEgaivezfZBfa@gamify-dev.7n3tz.mongodb.net/gamify-dev?retryWrites=true&w=majority',
         REDIS_URL: 'redis://127.0.0.1:6379',
         POOL_PROGRAM_ID: 'DJ7QgQehs5iYqqs3dVAPgUitYH8Wn7rYcb6TAD1tCeDe',
         CLUSTER: 'devnet',
@@ -29,10 +29,10 @@ module.exports = {
       },
       env_staging: {
         NODE_ENV: 'production',
-        HOST: 'https://staging-api.intersola.io',
+        HOST: 'https://staging-api.gamify.io',
         PORT: 3002,
         MONGODB_URL:
-          'mongodb+srv://root:ONkbEgaivezfZBfa@intersola-dev.7n3tz.mongodb.net/intersola?retryWrites=true&w=majority',
+          'mongodb+srv://root:ONkbEgaivezfZBfa@gamify-dev.7n3tz.mongodb.net/gamify?retryWrites=true&w=majority',
         REDIS_URL: 'redis://127.0.0.1:6379',
         POOL_PROGRAM_ID: 'DJ7QgQehs5iYqqs3dVAPgUitYH8Wn7rYcb6TAD1tCeDe',
         CLUSTER: 'devnet',
@@ -46,7 +46,7 @@ module.exports = {
       user: 'ubuntu',
       host: '54.151.154.88',
       ref: 'origin/develop',
-      repo: 'git@github.com:Intersolaio/api-pools.git',
+      repo: 'git@github.com:Gamifyio/api-pools.git',
       path: '/home/ubuntu/app/api-pools',
       'post-setup': 'cp .env.development .env && ./install.sh',
       'post-deploy':
@@ -56,7 +56,7 @@ module.exports = {
       user: 'root',
       host: '95.217.212.37',
       ref: 'origin/develop',
-      repo: 'git@github.com:Intersolaio/api-pools.git',
+      repo: 'git@github.com:Gamifyio/api-pools.git',
       path: '/root/app/api-pools',
       'post-setup': 'cp .env.staging .env && ./install.sh',
       'post-deploy':

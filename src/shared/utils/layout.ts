@@ -100,12 +100,12 @@ export interface EncodeDecode<T> {
 export const encodeDecode = <T>(layout: BufferLayout.Layout<T>): EncodeDecode<T> => {
   const decode = layout.decode.bind(layout);
   const encode = layout.encode.bind(layout);
-  return { decode, encode };
+  return {decode, encode};
 };
 
 export const bool = (property = 'bool'): BufferLayout.Layout<boolean> => {
   const layout = BufferLayout.u8(property);
-  const { encode, decode } = encodeDecode(layout);
+  const {encode, decode} = encodeDecode(layout);
 
   const boolLayout = layout as BufferLayout.Layout<unknown> as BufferLayout.Layout<boolean>;
 

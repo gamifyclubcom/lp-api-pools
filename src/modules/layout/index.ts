@@ -1,4 +1,4 @@
-import { Buffer } from 'buffer';
+import {Buffer} from 'buffer';
 import assert from 'assert';
 import BN from 'bn.js';
 

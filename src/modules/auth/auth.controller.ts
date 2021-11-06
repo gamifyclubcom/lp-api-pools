@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Post, HttpStatus } from '@nestjs/common';
+import {Body, Controller, HttpCode, Post, HttpStatus} from '@nestjs/common';
 import {
   ApiTags,
   ApiBody,
@@ -18,7 +18,7 @@ import SignaturePubkeyPairDTO from './dto/sign-in.dto';
 export default class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @ApiBody({ type: SignaturePubkeyPairDTO })
+  @ApiBody({type: SignaturePubkeyPairDTO})
   @ApiOkResponse({
     description: 'Returns jwt tokens',
   })

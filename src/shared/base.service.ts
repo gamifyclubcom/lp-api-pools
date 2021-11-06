@@ -1,4 +1,4 @@
-import { PaginateResponse } from './interface';
+import {PaginateResponse} from './interface';
 
 export class BaseService<T> {
   paginate = (
@@ -34,7 +34,7 @@ export function paginate(
     page: number;
     limit: number;
     docs: any[];
-    totalDocs?: number
+    totalDocs?: number;
   },
   needAll?: boolean,
 ): PaginateResponse<any> {

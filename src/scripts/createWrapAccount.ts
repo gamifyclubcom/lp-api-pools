@@ -9,7 +9,7 @@ import {
 } from '@solana/web3.js';
 import {getConnection} from '../shared/utils/connection';
 import {config as dotenvConfig} from 'dotenv';
-import {Actions, Instructions} from '@intersola/onchain-program-sdk';
+import {Actions, Instructions} from '@gamify/onchain-program-sdk';
 import {stringToUnit8Array} from '../shared/utils/helper';
 import {TOKEN_PROGRAM_ID, WRAPPED_SOL_MINT} from '@project-serum/serum/lib/token-instructions';
 import {AccountLayout} from '@solana/spl-token';

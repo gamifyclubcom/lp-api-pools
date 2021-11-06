@@ -1,10 +1,10 @@
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
-import { UserDTO } from '../../../modules/users/users.dto';
-import { envConfig } from '../../../configs';
+import {ExtractJwt, Strategy} from 'passport-jwt';
+import {PassportStrategy} from '@nestjs/passport';
+import {Injectable} from '@nestjs/common';
+import {UserDTO} from '../../../modules/users/users.dto';
+import {envConfig} from '../../../configs';
 
-const { JWT_SECRET } = envConfig;
+const {JWT_SECRET} = envConfig;
 
 @Injectable()
 export default class JwtRefreshStrategy extends PassportStrategy(Strategy, 'refreshToken') {

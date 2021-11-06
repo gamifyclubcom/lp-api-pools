@@ -1,5 +1,5 @@
 import * as BufferLayout from 'buffer-layout';
-import { bool } from './layout';
+import {bool} from './layout';
 import * as Layout from './layout';
 
 export const InitPoolLayout = [

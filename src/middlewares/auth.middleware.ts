@@ -1,8 +1,8 @@
 import {Injectable, NestMiddleware, UnauthorizedException} from '@nestjs/common';
 import * as httpContext from 'express-http-context';
 import * as express from 'express';
-import {ADDRESS} from 'src/shared/constants';
-import {verifyAndDecode} from '@intersola/onchain-program-sdk';
+import {ADDRESS} from '../shared/constants';
+import {verifyAndDecode} from '@gamify/onchain-program-sdk';
 import {Logger} from 'nestjs-pino';
 
 export const ACCESS_TOKEN_HEADER_NAME = 'access-token';

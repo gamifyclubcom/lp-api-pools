@@ -1,3 +1,3 @@
 export const SOL = 'SOL';
 
-export const ADDRESS = 'address'
+export const ADDRESS = 'address';

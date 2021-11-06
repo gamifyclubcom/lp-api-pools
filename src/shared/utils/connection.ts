@@ -1,7 +1,7 @@
-import { clusterApiUrl, Connection } from '@solana/web3.js';
-import { envConfig } from '../../../src/configs';
+import {clusterApiUrl, Connection} from '@solana/web3.js';
+import {envConfig} from '../../configs';
 
-const { CLUSTER } = envConfig;
+const {CLUSTER} = envConfig;
 
 let connection: Connection;
 

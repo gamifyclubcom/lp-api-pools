@@ -1,6 +1,6 @@
 import {Controller, Get} from '@nestjs/common';
 import {ApiBearerAuth, ApiOperation, ApiTags} from '@nestjs/swagger';
-import {CURRENT_POOL_PROGRAM_ID} from '@intersola/onchain-program-sdk';
+import {CURRENT_POOL_PROGRAM_ID} from '@gamify/onchain-program-sdk';
 import {PlatformService} from './platform.service';
 import {PublicKey} from '@solana/web3.js';
 

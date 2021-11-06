@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import * as minimist from 'minimist';
 import axios from 'axios';
 import pLimit from 'p-limit';
-import {sleep} from '@intersola/onchain-program-sdk';
+import {sleep} from '@gamify/onchain-program-sdk';
 
 const ARG_ADRRESSES = 'addresses';
 const ARG_POOL_ID = 'poolId';

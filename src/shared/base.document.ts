@@ -1,5 +1,5 @@
-import { SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema } from 'mongoose';
+import {SchemaFactory} from '@nestjs/mongoose';
+import {Document, Schema} from 'mongoose';
 
 export class BaseDocument extends Document {
   createdAt: Date;

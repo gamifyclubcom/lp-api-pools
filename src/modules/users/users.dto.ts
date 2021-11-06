@@ -1,39 +1,39 @@
-import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
-import { Document } from 'mongoose';
-import { User } from './users.interface';
-import { PaginateQuery } from '../../shared/interface';
+import {ApiProperty, ApiPropertyOptional, PartialType} from '@nestjs/swagger';
+import {Document} from 'mongoose';
+import {User} from './users.interface';
+import {PaginateQuery} from '../../shared/interface';
 
 export class UserEntity extends Document {
-  @ApiProperty({ type: String })
+  @ApiProperty({type: String})
   address: string;
 
-  @ApiProperty({ type: String })
+  @ApiProperty({type: String})
   first_name?: string;
 
-  @ApiProperty({ type: String })
+  @ApiProperty({type: String})
   last_name?: string;
 
-  @ApiProperty({ type: String })
+  @ApiProperty({type: String})
   email?: string;
 
-  @ApiProperty({ type: String })
+  @ApiProperty({type: String})
   avatar?: string;
 }
 
 export class UserDTO {
-  @ApiProperty({ type: String })
+  @ApiProperty({type: String})
   address: string;
 
-  @ApiProperty({ type: String })
+  @ApiProperty({type: String})
   first_name?: string;
 
-  @ApiProperty({ type: String })
+  @ApiProperty({type: String})
   last_name?: string;
 
-  @ApiProperty({ type: String })
+  @ApiProperty({type: String})
   email?: string;
 
-  @ApiProperty({ type: String })
+  @ApiProperty({type: String})
   avatar?: string;
 }
 export class IndexUsersOutput {

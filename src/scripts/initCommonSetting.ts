@@ -1,7 +1,7 @@
 import {config as dotenvConfig} from 'dotenv';
 dotenvConfig();
 import {getConnection} from '../shared/utils/connection';
-import {Actions} from '@intersola/onchain-program-sdk';
+import {Actions} from '@gamify/onchain-program-sdk';
 import {restoreKeypairFromString} from '../shared/utils/contract-main';
 import {envConfig} from '../configs/env.config';
 import {PublicKey} from '@solana/web3.js';

@@ -1,7 +1,7 @@
 import {Controller, Get, Param, Query} from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {ApiBearerAuth, ApiOperation, ApiTags} from '@nestjs/swagger';
 import {ReadPoolUserDto} from './poolMembers.dto';
-import { PoolMembersService } from './poolMembers.service';
+import {PoolMembersService} from './poolMembers.service';
 
 @ApiBearerAuth()
 @Controller('')

@@ -1,17 +1,17 @@
-import { Document } from 'mongoose';
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import {Document} from 'mongoose';
+import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
 
 export type WhitelistDocument = Whitelist & Document;
 
-@Schema({ timestamps: true })
+@Schema({timestamps: true})
 export class Whitelist {
-  @Prop({ required: true })
+  @Prop({required: true})
   poolId: string;
 
-  @Prop({ required: true })
+  @Prop({required: true})
   userAccount: string;
 
-  @Prop({ required: true })
+  @Prop({required: true})
   isWhitelisted: boolean;
 }
 

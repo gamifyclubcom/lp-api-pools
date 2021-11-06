@@ -1,4 +1,4 @@
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import {createParamDecorator, ExecutionContext} from '@nestjs/common';
 import * as jsonWebToken from 'jsonwebtoken';
 import * as BPromise from 'bluebird';
 const jwt = BPromise.promisifyAll(jsonWebToken);

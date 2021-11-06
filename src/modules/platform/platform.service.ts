@@ -2,7 +2,7 @@ import {
   Actions,
   CURRENT_POOL_PROGRAM_ID,
   sendAndConfirmTransaction,
-} from '@intersola/onchain-program-sdk';
+} from '@gamify/onchain-program-sdk';
 import {Injectable} from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
 import {Keypair, PublicKey, SystemProgram, Transaction} from '@solana/web3.js';

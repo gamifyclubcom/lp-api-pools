@@ -11,7 +11,7 @@ import {envConfig} from './configs';
 import {ResponseBodyLoggingInterceptor} from './interceptors/res-body-logging.interceptor';
 import * as basicAuth from 'express-basic-auth';
 import * as httpContext from 'express-http-context';
-import { ACCESS_TOKEN_HEADER_NAME } from './middlewares/auth.middleware';
+import {ACCESS_TOKEN_HEADER_NAME} from './middlewares/auth.middleware';
 import * as bodyParser from 'body-parser';
 
 dotenv.config();
@@ -26,12 +26,15 @@ async function bootstrap() {
   app.setGlobalPrefix('/api');
   app.useGlobalPipes(new ValidationPipe({transform: true}));
   app.useGlobalInterceptors(new ResponseBodyLoggingInterceptor(logger));
-  app.use(['/docs', '/docs-json'], basicAuth({
-    challenge: true,
-    users: {
-      [process.env.SWAGGER_USER]: process.env.SWAGGER_PASSWORD,
-    },
-  }))
+  app.use(
+    ['/docs', '/docs-json'],
+    basicAuth({
+      challenge: true,
+      users: {
+        [process.env.SWAGGER_USER]: process.env.SWAGGER_PASSWORD,
+      },
+    }),
+  );
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json());
   app.use(httpContext.middleware);
@@ -51,8 +54,8 @@ async function bootstrap() {
 
 async function initializeSwagger(app: INestApplication) {
   const options = new DocumentBuilder()
-    .setTitle(`Intersola API`)
-    .setDescription(`Swagger specification for API Intersola | [swagger.json](docs-json)`)
+    .setTitle(`Gamify API`)
+    .setDescription(`Swagger specification for API Gamify | [swagger.json](docs-json)`)
     .setVersion(API_VERSION)
     .addServer(`${DOMAIN}/api`)
     .addBasicAuth()

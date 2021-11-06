@@ -1,5 +1,5 @@
-import { Controller, Get, HttpStatus } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {Controller, Get, HttpStatus} from '@nestjs/common';
+import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 
 @Controller()
 @ApiTags('health')
@@ -13,6 +13,6 @@ export class HealthController {
   })
   @Get('health')
   health() {
-    return { status: 'OK' };
+    return {status: 'OK'};
   }
 }

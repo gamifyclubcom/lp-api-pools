@@ -6,7 +6,7 @@ import {NestExpressApplication} from '@nestjs/platform-express';
 import {PlatformService} from '../modules/platform/platform.service';
 import {AppModule} from '../app.module';
 import {getConnection} from '../shared/utils/connection';
-import {Actions, CURRENT_POOL_PROGRAM_ID} from '@intersola/onchain-program-sdk';
+import {Actions, CURRENT_POOL_PROGRAM_ID} from '@gamify/onchain-program-sdk';
 import {restoreKeypairFromString} from '../shared/utils/contract-main';
 import {envConfig} from '../configs/env.config';
 import {PublicKey} from '@solana/web3.js';
@@ -33,7 +33,7 @@ class Program {
   }
 
   private async process() {
-    const connection = await getConnection();
+    const connection = getConnection();
     const action: Actions = new Actions(connection);
     const payerSecret = envConfig.PAYER_SECRET_KEY;
     const stakeSecretKey = envConfig.STAKE_SECRET_KEY;
@@ -46,7 +46,7 @@ class Program {
           payerSecret,
           stakeSecretKey,
           tokenMinAddress,
-          stakaAdminAddress
+          stakaAdminAddress,
         }}`,
       );
     }

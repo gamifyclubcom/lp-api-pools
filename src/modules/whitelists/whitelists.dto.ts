@@ -1,12 +1,12 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Exclude } from 'class-transformer';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
-import { WhitelistDocument } from './whitelists.schema';
+import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
+import {Exclude} from 'class-transformer';
+import {IsNumber, IsOptional, IsString} from 'class-validator';
+import {WhitelistDocument} from './whitelists.schema';
 
 export class PaginationOptions {
-  @ApiPropertyOptional({ type: Number })
+  @ApiPropertyOptional({type: Number})
   page?: number;
-  @ApiPropertyOptional({ type: Number })
+  @ApiPropertyOptional({type: Number})
   limit?: number;
 }
 

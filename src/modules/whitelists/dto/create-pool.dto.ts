@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString } from 'class-validator';
+import {ApiProperty} from '@nestjs/swagger';
+import {IsDateString} from 'class-validator';
 // import { IWhitelist } from '../whitelists.interface';
 // import { WhitelistDocument } from '../whitelists.schema';
 

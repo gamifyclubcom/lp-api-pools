@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
-import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
+import {Module} from '@nestjs/common';
+import {PassportModule} from '@nestjs/passport';
+import {JwtModule} from '@nestjs/jwt';
 
 import UsersModule from '../users/users.module';
 import AuthRepository from '../auth/auth.repository';
@@ -9,9 +9,9 @@ import JwtRefreshStrategy from './strategies/jwt-refresh.strategy';
 
 import AuthController from './auth.controller';
 import AuthService from './auth.service';
-import { envConfig } from '../../configs';
+import {envConfig} from '../../configs';
 
-const { JWT_SECRET } = envConfig;
+const {JWT_SECRET} = envConfig;
 
 @Module({
   imports: [

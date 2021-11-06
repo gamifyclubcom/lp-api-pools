@@ -1,16 +1,21 @@
-import { Actions } from '@intersola/onchain-program-sdk';
-import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { PublicKey } from '@solana/web3.js';
-import { PaginateModel } from 'mongoose';
-import { paginationConfig } from '../../configs';
-import { getConnection } from '../../shared/utils/connection';
-import { paginate } from '../../shared/base.service';
-import { PaginateResponse } from '../../shared/interface';
-import { IPool } from '../pools/pools.interface';
-import { PoolsService } from '../pools/pools.service';
-import { RemoveWhitelistUserDto, SetWhitelistUserDto, WhitelistsFilterInput } from './whitelists.dto';
-import { Whitelist, WhitelistDocument } from './whitelists.schema';
+import {Actions} from '@gamify/onchain-program-sdk';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import {InjectModel} from '@nestjs/mongoose';
+import {PublicKey} from '@solana/web3.js';
+import {PaginateModel} from 'mongoose';
+import {paginationConfig} from '../../configs';
+import {getConnection} from '../../shared/utils/connection';
+import {paginate} from '../../shared/base.service';
+import {PaginateResponse} from '../../shared/interface';
+import {IPool} from '../pools/pools.interface';
+import {PoolsService} from '../pools/pools.service';
+import {RemoveWhitelistUserDto, SetWhitelistUserDto, WhitelistsFilterInput} from './whitelists.dto';
+import {Whitelist, WhitelistDocument} from './whitelists.schema';
 
 const connection = getConnection();
 
@@ -52,13 +57,13 @@ export class WhitelistsService {
     }
 
     const whitelists = await this.model.find({poolId: input.poolId});
-    const listAccounts = whitelists.map(account => account.userAccount);
+    const listAccounts = whitelists.map((account) => account.userAccount);
     const userAccounts = [];
     input.userAccount.forEach((account) => {
       if (!listAccounts.includes(account)) {
         userAccounts.push(account);
       }
-    })
+    });
     await this.model.insertMany(
       userAccounts.map((item) => ({
         poolId: input.poolId,
@@ -90,13 +95,16 @@ export class WhitelistsService {
     const whitelists = await this.model.find({
       poolId: input.poolId,
       isWhitelisted: true,
-      userAccount: {$in: userAccounts}
+      userAccount: {$in: userAccounts},
     });
-    const accountWhitelisted = whitelists.map(account => account.userAccount);
+    const accountWhitelisted = whitelists.map((account) => account.userAccount);
     const accountsNeedInsert = [];
     try {
-      for(let i = 0; i < userAccounts.length; i++) {
-        const isWhitelisted = await this.action.isAccountWhitelisted(new PublicKey(userAccounts[i]), poolAddress);
+      for (let i = 0; i < userAccounts.length; i++) {
+        const isWhitelisted = await this.action.isAccountWhitelisted(
+          new PublicKey(userAccounts[i]),
+          poolAddress,
+        );
         if (isWhitelisted && !accountWhitelisted.includes(userAccounts[i])) {
           accountsNeedInsert.push(userAccounts[i]);
         }
@@ -107,7 +115,7 @@ export class WhitelistsService {
 
     await this.model.deleteMany({
       poolId: input.poolId,
-      userAccount: {$in: accountsNeedInsert}
+      userAccount: {$in: accountsNeedInsert},
     });
     await this.model.insertMany(
       accountsNeedInsert.map((item) => ({
@@ -120,7 +128,7 @@ export class WhitelistsService {
     return {
       success: true,
       accountsInserted: accountsNeedInsert,
-      total: accountsNeedInsert.length
+      total: accountsNeedInsert.length,
     };
   }
 
@@ -133,7 +141,7 @@ export class WhitelistsService {
     if (!pool) {
       throw new Error('Pool is not found');
     }
-    await this.model.deleteMany({userAccount: {$in: input.userAccounts}, poolId: input.poolId})
+    await this.model.deleteMany({userAccount: {$in: input.userAccounts}, poolId: input.poolId});
 
     return {
       ok: true,
@@ -179,7 +187,7 @@ export class WhitelistsService {
     filters?: WhitelistsFilterInput,
   ): Promise<PaginateResponse<WhitelistDocument>> {
     if (!filters.poolId) {
-      throw new BadRequestException('Missing poolId parameter')
+      throw new BadRequestException('Missing poolId parameter');
     }
     const page = filters.page
       ? parseInt(filters.page.toString(), 10)
@@ -200,7 +208,11 @@ export class WhitelistsService {
       ...(filters.userAccount && {userAccount: filters.userAccount}),
     };
 
-    const docs: any = await this.model.find(options).sort({createdAt: 1}).limit(limit).skip(limit*page);
+    const docs: any = await this.model
+      .find(options)
+      .sort({createdAt: 1})
+      .limit(limit)
+      .skip(limit * page);
     const totalDocs: number = await this.model.count(options);
 
     const paginated = paginate({page, limit, docs, totalDocs});

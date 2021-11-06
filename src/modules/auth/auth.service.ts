@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { DecodedUser } from './interfaces/decoded-user.interface';
+import {Injectable} from '@nestjs/common';
+import {JwtService} from '@nestjs/jwt';
+import {DecodedUser} from './interfaces/decoded-user.interface';
 import AuthRepository from './auth.repository';
 import UsersService from '../users/users.service';
 import SignaturePubkeyPairDTO from './dto/sign-in.dto';
@@ -31,12 +31,12 @@ export default class AuthService {
     const accessToken = this.jwtService.sign(payload);
     const refreshToken = this.jwtService.sign(payload);
 
-    return { accessToken, refreshToken };
+    return {accessToken, refreshToken};
   }
 
   public async verifyToken(token: string, secret: string): Promise<DecodedUser | null> {
     try {
-      const user = (await this.jwtService.verifyAsync(token, { secret })) as DecodedUser | null;
+      const user = (await this.jwtService.verifyAsync(token, {secret})) as DecodedUser | null;
 
       return user;
     } catch (error) {

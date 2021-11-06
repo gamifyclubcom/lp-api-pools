@@ -2,8 +2,7 @@ import {
   Actions,
   getJoinPoolStartAndEndTimeV4,
   IPoolV4ContractData,
-  POOL_PROGRAM_ID,
-} from '@intersola/onchain-program-sdk';
+} from '@gamify/onchain-program-sdk';
 import {BadRequestException, ForbiddenException, NotFoundException} from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
 import {WRAPPED_SOL_MINT} from '@project-serum/serum/lib/token-instructions';
@@ -29,7 +28,7 @@ import {
 } from '../../shared/utils/helper';
 import {Instructions} from '../../shared/utils/instructions';
 import {ICampaign, IFee, IRate} from '../../shared/utils/interface';
-import {initPool, readPoolData} from '../../shared/utils/contract-main';
+import {readPoolData} from '../../shared/utils/contract-main';
 import {PlatformService} from '../platform/platform.service';
 import {ClaimTokenHistory, ClaimTokenHistoryDocument} from './claimTokenHistory.schema';
 import {CreateClaimTokenHistoryDto} from './dto/claim-token-history.dto';
@@ -298,89 +297,89 @@ export class PoolsService extends BaseService<PoolDocument> {
     throw new NotFoundException('Pool not found');
   }
 
-  public async create(input: CreatePoolInput): Promise<any> {
-    const {earlyJoinStartTime, earlyJoinEndTime, publicStartTime, publicEndTime, claimAt} =
-      this.validateAndGetPhasesTime(
-        input.join_pool_start,
-        input.join_pool_end,
-        input.campaign.claim_at,
-        input.campaign.early_join_phase.is_active,
-        input.early_join_duration,
-      );
+  // public async create(input: CreatePoolInput): Promise<any> {
+  //   const {earlyJoinStartTime, earlyJoinEndTime, publicStartTime, publicEndTime, claimAt} =
+  //     this.validateAndGetPhasesTime(
+  //       input.join_pool_start,
+  //       input.join_pool_end,
+  //       input.campaign.claim_at,
+  //       input.campaign.early_join_phase.is_active,
+  //       input.early_join_duration,
+  //     );
 
-    const pool_start = new Date(input.pool_start).getTime();
-    if (
-      pool_start >=
-      new Date(
-        input.campaign.early_join_phase.is_active ? earlyJoinStartTime : publicStartTime,
-      ).getTime()
-    ) {
-      throw new BadRequestException('pool_start cannot greater than or equal join_pool_start');
-    }
-    const slug = slugify(input?.slug || `${input?.name}-${input?.token?.token_symbol}`, {
-      lower: true,
-    });
+  //   const pool_start = new Date(input.pool_start).getTime();
+  //   if (
+  //     pool_start >=
+  //     new Date(
+  //       input.campaign.early_join_phase.is_active ? earlyJoinStartTime : publicStartTime,
+  //     ).getTime()
+  //   ) {
+  //     throw new BadRequestException('pool_start cannot greater than or equal join_pool_start');
+  //   }
+  //   const slug = slugify(input?.slug || `${input?.name}-${input?.token?.token_symbol}`, {
+  //     lower: true,
+  //   });
 
-    const tokenDecimals = await this.getTokenDecimals(input.token.token_address);
-    const tokenToDecimals = await this.getTokenDecimals(input.token_to);
-    const rate = await this.convertRateToDataContract(
-      tokenToDecimals,
-      tokenDecimals,
-      input.token_ratio,
-    );
-    const platformAddress: string = (
-      await this.platformService.generate(new PublicKey(POOL_PROGRAM_ID))
-    ).publicKey;
-    const poolAccount = Keypair.fromSecretKey(stringToUnit8Array(input.pool_account_secret));
-    const poolContractAccount = poolAccount.publicKey;
+  //   const tokenDecimals = await this.getTokenDecimals(input.token.token_address);
+  //   const tokenToDecimals = await this.getTokenDecimals(input.token_to);
+  //   const rate = await this.convertRateToDataContract(
+  //     tokenToDecimals,
+  //     tokenDecimals,
+  //     input.token_ratio,
+  //   );
+  //   const platformAddress: string = (
+  //     await this.platformService.generate(new PublicKey(POOL_PROGRAM_ID))
+  //   ).publicKey;
+  //   const poolAccount = Keypair.fromSecretKey(stringToUnit8Array(input.pool_account_secret));
+  //   const poolContractAccount = poolAccount.publicKey;
 
-    const initPoolParams = {
-      token_to: input.token_to,
-      tokenAddress: input?.token.token_address,
-      rootAdminAddress: input.root_admin,
-      payer: input.payer,
-      poolContractAccount,
-      platformAddress,
-      initPoolData: {
-        rate,
-        fees: {
-          numerator: 0,
-          denominator: 1,
-        },
-        campaign: {
-          max_allocation_all_phases: convertToContractAmount(
-            input.campaign.max_allocation_all_phases,
-            tokenDecimals,
-          ),
-          claim_at: claimAt,
-          early_join_phase: {
-            is_active: input.campaign.early_join_phase.is_active,
-            max_total_alloc: !!input.campaign.early_join_phase.max_total_alloc
-              ? convertToContractAmount(
-                  input.campaign.early_join_phase.max_total_alloc,
-                  tokenDecimals,
-                )
-              : 0,
-            start_at: earlyJoinStartTime,
-            end_at: earlyJoinEndTime,
-          },
-          public_phase: {
-            is_active: true,
-            max_individual_alloc: convertToContractAmount(
-              input.campaign.public_phase.max_individual_alloc,
-              tokenDecimals,
-            ),
-            start_at: publicStartTime,
-            end_at: publicEndTime,
-          },
-        },
-      },
-      poolTokenXAccount: input.pool_token_x,
-      poolTokenYAccount: input.pool_token_y,
-    };
-    this.validateInitPoolParams(initPoolParams.initPoolData);
-    return initPool(initPoolParams);
-  }
+  //   const initPoolParams = {
+  //     token_to: input.token_to,
+  //     tokenAddress: input?.token.token_address,
+  //     rootAdminAddress: input.root_admin,
+  //     payer: input.payer,
+  //     poolContractAccount,
+  //     platformAddress,
+  //     initPoolData: {
+  //       rate,
+  //       fees: {
+  //         numerator: 0,
+  //         denominator: 1,
+  //       },
+  //       campaign: {
+  //         max_allocation_all_phases: convertToContractAmount(
+  //           input.campaign.max_allocation_all_phases,
+  //           tokenDecimals,
+  //         ),
+  //         claim_at: claimAt,
+  //         early_join_phase: {
+  //           is_active: input.campaign.early_join_phase.is_active,
+  //           max_total_alloc: !!input.campaign.early_join_phase.max_total_alloc
+  //             ? convertToContractAmount(
+  //                 input.campaign.early_join_phase.max_total_alloc,
+  //                 tokenDecimals,
+  //               )
+  //             : 0,
+  //           start_at: earlyJoinStartTime,
+  //           end_at: earlyJoinEndTime,
+  //         },
+  //         public_phase: {
+  //           is_active: true,
+  //           max_individual_alloc: convertToContractAmount(
+  //             input.campaign.public_phase.max_individual_alloc,
+  //             tokenDecimals,
+  //           ),
+  //           start_at: publicStartTime,
+  //           end_at: publicEndTime,
+  //         },
+  //       },
+  //     },
+  //     poolTokenXAccount: input.pool_token_x,
+  //     poolTokenYAccount: input.pool_token_y,
+  //   };
+  //   this.validateInitPoolParams(initPoolParams.initPoolData);
+  //   return initPool(initPoolParams);
+  // }
 
   public async commitInitPool(input: CommitInitPoolDto) {
     let contract_address = input.pool_account;

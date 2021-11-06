@@ -78,10 +78,10 @@ export const escapeRegExp = (str: string) => {
   return str.replace(regex, '\\$&');
 };
 
-export const countDecimals =  (num: number) => {
-  if(Math.floor(num.valueOf()) === num.valueOf()) return 0;
-  return num.toString().split(".")[1].length || 0;
-}
+export const countDecimals = (num: number) => {
+  if (Math.floor(num.valueOf()) === num.valueOf()) return 0;
+  return num.toString().split('.')[1].length || 0;
+};
 
 export function addMongooseParam(mongooseObject = {}, key: string, value: string | any) {
   if (!mongooseObject) {

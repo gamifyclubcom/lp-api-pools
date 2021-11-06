@@ -1,5 +1,5 @@
-import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
-import { PublicKey } from '@solana/web3.js';
+import {BadRequestException, Injectable, PipeTransform} from '@nestjs/common';
+import {PublicKey} from '@solana/web3.js';
 
 @Injectable()
 export class ParseOnchainAddressPipe implements PipeTransform {

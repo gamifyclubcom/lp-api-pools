@@ -1,16 +1,16 @@
-import { Document } from 'mongoose';
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import {Document} from 'mongoose';
+import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
 import * as MongoosePaginate from 'mongoose-paginate-v2';
 import * as MongooseFuzzySearching from 'mongoose-fuzzy-searching';
 
 export type UserDocument = User & Document;
 
-@Schema({ timestamps: true })
+@Schema({timestamps: true})
 export class User {
   @Prop()
   avatar: string;
 
-  @Prop({ required: true })
+  @Prop({required: true})
   address: string;
 
   @Prop()
@@ -28,4 +28,4 @@ export const UserSchema = SchemaFactory.createForClass(User)
   .plugin(MongooseFuzzySearching, {
     fields: ['first_name', 'last_name', 'email'],
   })
-  .index({ address: 1, email: 1 });
+  .index({address: 1, email: 1});

@@ -8,7 +8,7 @@ import {Parser} from 'json2csv';
 import {Response} from 'express';
 import {UserStakeHistory, UserStakeHistoryDocument} from './userStakeHistory.schemal';
 import {CreateUserStakeHistory} from './dto/userStakeHisotry.dto';
-import {Actions, CURRENT_STAKE_ACCOUNT} from '@intersola/onchain-program-sdk';
+import {Actions, CURRENT_STAKE_ACCOUNT} from '@gamify/onchain-program-sdk';
 import {UserStakeActionType} from './constants';
 import Decimal from 'decimal.js';
 import {PublicKey} from '@solana/web3.js';

@@ -1,9 +1,9 @@
 import {Body, Controller, Get, Post, Query, UseGuards} from '@nestjs/common';
 import {ApiBearerAuth, ApiOperation, ApiTags} from '@nestjs/swagger';
-import {AdminGuard} from 'src/guards/admin.guard';
-import {PoolOwnerBodyGuard} from 'src/guards/pool-owner.body.guard';
-import { PoolOwnerQueryGuard } from 'src/guards/pool-owner.query.guard';
-import {ACCESS_TOKEN_HEADER_NAME} from 'src/middlewares/auth.middleware';
+import {AdminGuard} from '../../guards/admin.guard';
+import {PoolOwnerBodyGuard} from '../../guards/pool-owner.body.guard';
+import {PoolOwnerQueryGuard} from '../../guards/pool-owner.query.guard';
+import {ACCESS_TOKEN_HEADER_NAME} from '../../middlewares/auth.middleware';
 import {RemoveWhitelistUserDto, SetWhitelistUserDto, WhitelistsFilterInput} from './whitelists.dto';
 import {WhitelistsService} from './whitelists.service';
 

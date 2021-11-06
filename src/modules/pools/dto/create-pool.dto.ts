@@ -93,7 +93,7 @@ export class InitPoolOffchainData {
 
   @ApiPropertyOptional()
   @IsOptional()
-  liquidity_percentage ?: string;
+  liquidity_percentage?: string;
 
   @ApiPropertyOptional({
     type: String,
@@ -164,7 +164,6 @@ export class InitPoolOffchainData {
   @IsOptional()
   pool_account?: string;
 
-
   @ApiPropertyOptional()
   @IsString()
   @IsOptional()
@@ -173,7 +172,7 @@ export class InitPoolOffchainData {
   @ApiPropertyOptional()
   @IsOptional()
   @IsNumber()
-  claimable_percentage?: number
+  claimable_percentage?: number;
 }
 export class CreatePoolInput extends InitPoolOffchainData {
   @ApiProperty()

@@ -1,4 +1,4 @@
-import {Actions} from '@intersola/onchain-program-sdk';
+import {Actions} from '@gamify/onchain-program-sdk';
 import {PublicKey} from '@solana/web3.js';
 import {getConnection} from '../shared/utils/connection';
 

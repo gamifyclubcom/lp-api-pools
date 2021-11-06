@@ -1,6 +1,6 @@
 import {CanActivate, ExecutionContext, Injectable, UnauthorizedException} from '@nestjs/common';
 import * as httpContext from 'express-http-context';
-import {ADDRESS} from 'src/shared/constants';
+import {ADDRESS} from '../shared/constants';
 
 @Injectable()
 export class AdminGuard implements CanActivate {

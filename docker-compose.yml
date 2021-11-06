@@ -1,32 +1,35 @@
 version: "3.4"
 
-services:
-  app:
-    build: .
-    ports:
-      - "${PORT}:${PORT}"
+services: 
+  api:
+    container_name: api-pools
+    build:     
+      context: .
+      target: development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks: 
+      - api-pools
+    depends_on: 
+      - db
+    links: 
+      - db
+    ports: 
+      - ${PORT}:${PORT}
     restart: always
-    depends_on:
-      - db
-    links:
-      - db
-    networks:
-      - intersola
-    volumes:
-      - ./:/app
     user: 1000:1000
-  db:
+    command: npm run start:dev
+    env_file:
+      - .env
+  db: 
     image: mongo:4.4
-    ports:
-      - "27020:27017"
-    networks:
-      - intersola
-    volumes:
+    volumes: 
       - ./data-dev:/data/db
-    restart: unless-stopped
-    user: 1000:1000
-      # - data:/data/db
-# volumes:
-#   data:
-networks:
-  intersola:
+    ports: 
+      - "27020:27017"
+    networks: 
+      - api-pools
+
+networks: 
+  api-pools:

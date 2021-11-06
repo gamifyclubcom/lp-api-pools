@@ -214,7 +214,7 @@ export class UpdateOffchainPoolInput {
   @ApiPropertyOptional()
   @IsOptional()
   @IsNumber()
-  claimable_percentage?: number
+  claimable_percentage?: number;
 }
 
 export class ChangePoolAdminInput {

@@ -1,12 +1,12 @@
-import {Actions, ICommonSetting} from '@intersola/onchain-program-sdk';
+import {Actions, ICommonSetting} from '@gamify/onchain-program-sdk';
 import {CanActivate, ExecutionContext, Injectable} from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
 import {PublicKey} from '@solana/web3.js';
 import * as httpContext from 'express-http-context';
 import {PaginateModel} from 'mongoose';
-import {Pool, PoolDocument} from 'src/modules/pools/pools.schema';
-import {ADDRESS} from 'src/shared/constants';
-import {getConnection} from 'src/shared/utils/connection';
+import {Pool, PoolDocument} from '../modules/pools/pools.schema';
+import {ADDRESS} from '../shared/constants';
+import {getConnection} from '../shared/utils/connection';
 
 @Injectable()
 export class PoolOwnerBodyGuard implements CanActivate {

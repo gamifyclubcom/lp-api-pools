@@ -7,9 +7,9 @@ import {
   sendAndConfirmTransaction as realSendAndConfirmTransaction,
   TransactionSignature,
 } from '@solana/web3.js';
-import { PlatformLayout, PoolLayout } from './contract-layout';
-import { Instructions } from './instructions';
-import { IInitPoolData } from './interface';
+import {PlatformLayout, PoolLayout} from './contract-layout';
+import {Instructions} from './instructions';
+import {IInitPoolData} from './interface';
 export class Pool {
   static async createPool(
     connection: Connection,
