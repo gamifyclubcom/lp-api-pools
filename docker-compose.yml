@@ -1,0 +1,35 @@
+version: "3.4"
+
+services: 
+  api:
+    container_name: api-pools
+    build:     
+      context: .
+      target: development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks: 
+      - api-pools
+    depends_on: 
+      - db
+    links: 
+      - db
+    ports: 
+      - ${PORT}:${PORT}
+    restart: always
+    user: 1000:1000
+    command: npm run start:dev
+    env_file:
+      - .env
+  db: 
+    image: mongo:4.4
+    volumes: 
+      - ./data-dev:/data/db
+    ports: 
+      - "27020:27017"
+    networks: 
+      - api-pools
+
+networks: 
+  api-pools:

@@ -1,0 +1,9 @@
+{
+  "apps": [
+      {
+          "name": "api-pools",
+          "script": "npm",
+          "args" : "start"
+      }
+  ]
+}
