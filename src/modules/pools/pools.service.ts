@@ -163,7 +163,11 @@ export class PoolsService extends BaseService<PoolDocument> {
             {
               $or: [
                 {
-                  $and: [{'data.version': {$gte: 4}}, {'data.voting.is_active': false}],
+                  $and: [
+                    {'data.version': {$gte: 4}},
+                    {'data.voting.is_active': false},
+                    {join_pool_start: {$gte: now}},
+                  ],
                 },
                 {
                   $and: [
