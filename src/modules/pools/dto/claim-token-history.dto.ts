@@ -61,3 +61,15 @@ export class GetClaimTokenHistoryDto {
   @IsString()
   token_address: string;
 }
+
+export class GetJoinPoolHistoryDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  user_address: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  pool_address: string;
+}

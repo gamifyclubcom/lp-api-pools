@@ -16,6 +16,7 @@ export interface IPoolContractData {
 
 export interface IPoolFullInfo {
   logo?: string;
+  thumbnail?: string;
   name: string;
   slug?: string;
   website?: string;

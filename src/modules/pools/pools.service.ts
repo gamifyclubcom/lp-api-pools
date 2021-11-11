@@ -161,11 +161,19 @@ export class PoolsService extends BaseService<PoolDocument> {
               ],
             },
             {
-              $and: [
-                {'data.version': {$gte: 4}},
-                {'flags.is_ready': true},
-                {join_pool_start: {$gte: now}},
-                {'data.voting.end_at': {$lte: now}},
+              $or: [
+                {
+                  $and: [{'data.version': {$gte: 4}}, {'data.voting.is_active': false}],
+                },
+                {
+                  $and: [
+                    {'data.version': {$gte: 4}},
+                    {'data.voting.is_active': true},
+                    {'flags.is_ready': true},
+                    {join_pool_start: {$gte: now}},
+                    {'data.voting.end_at': {$lte: now}},
+                  ],
+                },
               ],
             },
           ];
@@ -184,10 +192,18 @@ export class PoolsService extends BaseService<PoolDocument> {
       query.$or = [
         {'data.version': {$lt: 4}},
         {
-          $and: [
-            {'data.version': {$gte: 4}},
-            {$or: [{'flags.is_ready': true}]},
-            {'data.voting.end_at': {$lte: now}},
+          $or: [
+            {
+              $and: [{'data.version': {$gte: 4}}, {'data.voting.is_active': false}],
+            },
+            {
+              $and: [
+                {'data.version': {$gte: 4}},
+                {'data.voting.is_active': true},
+                {$or: [{'flags.is_ready': true}]},
+                {'data.voting.end_at': {$lte: now}},
+              ],
+            },
           ],
         },
       ];
@@ -540,6 +556,7 @@ export class PoolsService extends BaseService<PoolDocument> {
     const {
       pool_start,
       logo,
+      thumbnail,
       tag_line,
       name,
       website,
@@ -579,6 +596,7 @@ export class PoolsService extends BaseService<PoolDocument> {
 
     const updateQuery = {
       ...(typeof logo === 'string' && {logo}),
+      ...(typeof thumbnail === 'string' && {thumbnail}),
       ...(typeof tag_line === 'string' && {tag_line}),
       ...(pool_start && {pool_start}),
       ...(typeof name === 'string' && {name}),
@@ -1042,6 +1060,15 @@ export class PoolsService extends BaseService<PoolDocument> {
     });
 
     return claimTokenHistory;
+  }
+
+  public async getJoinPoolHistory(user_address: string, pool_address: string): Promise<any> {
+    const joinPoolHistories = await this.joinPool.find({
+      user_address,
+      pool_address,
+    });
+
+    return joinPoolHistories;
   }
 
   public async exportJoinPoolHistory(poolAddress: string, res: Response) {
