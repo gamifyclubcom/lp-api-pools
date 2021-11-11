@@ -161,11 +161,19 @@ export class PoolsService extends BaseService<PoolDocument> {
               ],
             },
             {
-              $and: [
-                {'data.version': {$gte: 4}},
-                {'flags.is_ready': true},
-                {join_pool_start: {$gte: now}},
-                {'data.voting.end_at': {$lte: now}},
+              $or: [
+                {
+                  $and: [{'data.version': {$gte: 4}}, {'data.voting.is_active': false}],
+                },
+                {
+                  $and: [
+                    {'data.version': {$gte: 4}},
+                    {'data.voting.is_active': true},
+                    {'flags.is_ready': true},
+                    {join_pool_start: {$gte: now}},
+                    {'data.voting.end_at': {$lte: now}},
+                  ],
+                },
               ],
             },
           ];
@@ -191,6 +199,7 @@ export class PoolsService extends BaseService<PoolDocument> {
             {
               $and: [
                 {'data.version': {$gte: 4}},
+                {'data.voting.is_active': true},
                 {$or: [{'flags.is_ready': true}]},
                 {'data.voting.end_at': {$lte: now}},
               ],
