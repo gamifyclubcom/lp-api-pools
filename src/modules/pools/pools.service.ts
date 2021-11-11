@@ -82,13 +82,14 @@ export class PoolsService extends BaseService<PoolDocument> {
       }),
     };
 
-    const commonSetting = await new Actions(connection).readCommonSettingByProgramId();
-    if (commonSetting.admin !== address) {
-      options = {
-        'data.admins.root_admin': address,
-        ...options,
-      };
-    }
+    // const commonSetting = await new Actions(connection).readCommonSettingByProgramId();
+    // TODO: still list all until pool perrmisison less feature is active
+    // if (commonSetting.admin !== address) {
+    //   options = {
+    //     'data.admins.root_admin': address,
+    //     ...options,
+    //   };
+    // }
 
     if (poolProgramId) {
       options = Object.assign(options, {
