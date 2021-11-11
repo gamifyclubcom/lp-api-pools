@@ -271,6 +271,9 @@ export class Pool {
   @Prop()
   logo?: string;
 
+  @Prop()
+  thumbnail?: string;
+
   @Prop({required: true})
   name: string;
 

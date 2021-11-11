@@ -1,6 +1,10 @@
 import {Body, Controller, Get, Param, Post, Put, Query} from '@nestjs/common';
 import {ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags} from '@nestjs/swagger';
-import {CreateClaimTokenHistoryDto, GetClaimTokenHistoryDto} from './dto/claim-token-history.dto';
+import {
+  CreateClaimTokenHistoryDto,
+  GetClaimTokenHistoryDto,
+  GetJoinPoolHistoryDto,
+} from './dto/claim-token-history.dto';
 import {CreateJoinPoolHistory} from './dto/join-pool.dto';
 import {
   IndexPoolsOutput,
@@ -74,6 +78,15 @@ export class PoolsController {
   })
   async joinPool(@Body() input: CreateJoinPoolHistory) {
     return this.poolsService.createJoinPoolHistory(input);
+  }
+
+  @Get('join_pool/histories')
+  @ApiOperation({
+    operationId: 'getJoinPoolHistory',
+    description: 'User get join pool history',
+  })
+  async getJoinPoolHistory(@Query() query: GetJoinPoolHistoryDto) {
+    return this.poolsService.getJoinPoolHistory(query.user_address, query.pool_address);
   }
 
   @Post('claim-token/histories')

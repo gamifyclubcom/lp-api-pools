@@ -1,5 +1,6 @@
 export const mockPool = {
   logo: 'https://community.jboss.org/people/timfox/avatar/46.png',
+  thumbnail: 'https://community.jboss.org/people/timfox/avatar/46.png',
   website: 'https://solana.com/',
   white_paper: 'https://docs.solana.com/',
   token_economic: 'https://docs.solana.com/',

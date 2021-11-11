@@ -125,6 +125,14 @@ export class UpdateOffchainPoolInput {
 
   @ApiPropertyOptional({
     type: String,
+    example: mockPool.thumbnail,
+  })
+  @IsOptional()
+  @IsString()
+  thumbnail?: string;
+
+  @ApiPropertyOptional({
+    type: String,
   })
   @IsOptional()
   @IsString()

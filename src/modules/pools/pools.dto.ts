@@ -206,6 +206,12 @@ export class PoolDto implements IPoolFullInfo {
 
   @ApiProperty({
     type: String,
+    example: mockPool.thumbnail,
+  })
+  thumbnail?: string;
+
+  @ApiProperty({
+    type: String,
     example: mockPool.name,
   })
   @IsNotEmpty()
