@@ -11,11 +11,9 @@ import {Address} from '../../decorators/address.decorator';
 import {AdminGuard} from '../../guards/admin.guard';
 import {ACCESS_TOKEN_HEADER_NAME} from '../../middlewares/auth.middleware';
 import {PoolFiltersValidationPipe} from '../../pipes/pool-filters.validation.pipe';
-import {CommitInitPoolDto, CreatePoolInput} from './dto/create-pool.dto';
+import {CommitInitPoolDto} from './dto/create-pool.dto';
 import {
-  ChangePoolAdminInput,
   UpdateOffchainPoolInput,
-  UpdateOnchainPoolInput,
 } from './dto/update-pool.dto';
 import {
   IndexPoolsOutput,
@@ -53,7 +51,7 @@ export class PoolsAdminController {
     operationId: 'getOnePool',
     summary: 'Get One Pool',
   })
-  @UseGuards(PoolOwnerGuard)
+  // @UseGuards(PoolOwnerGuard)
   @ApiOkResponse({type: PoolOutput})
   async findOne(@Param('id') id: string) {
     return this.poolsService.findOne(id);
