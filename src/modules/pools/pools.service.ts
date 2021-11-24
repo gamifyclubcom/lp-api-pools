@@ -3,21 +3,21 @@ import {
   getJoinPoolStartAndEndTimeV4,
   IPoolV4ContractData,
 } from '@gamify/onchain-program-sdk';
-import {BadRequestException, ForbiddenException, NotFoundException} from '@nestjs/common';
-import {InjectModel} from '@nestjs/mongoose';
-import {WRAPPED_SOL_MINT} from '@project-serum/serum/lib/token-instructions';
-import {MintLayout} from '@solana/spl-token';
-import {Keypair, PublicKey, Transaction} from '@solana/web3.js';
-import {ObjectId} from 'bson';
+import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { WRAPPED_SOL_MINT } from '@project-serum/serum/lib/token-instructions';
+import { MintLayout } from '@solana/spl-token';
+import { Keypair, PublicKey, Transaction } from '@solana/web3.js';
+import { ObjectId } from 'bson';
 import Decimal from 'decimal.js';
 import * as _ from 'lodash';
-import {PaginateModel} from 'mongoose';
-import {MongooseFuzzyModel} from 'mongoose-fuzzy-searching';
+import { PaginateModel } from 'mongoose';
+import { MongooseFuzzyModel } from 'mongoose-fuzzy-searching';
 import slugify from 'slugify';
-import {BaseService, paginate} from '../../shared/base.service';
-import {SOL} from '../../shared/constants';
-import {PaginateResponse} from '../../shared/interface';
-import {getConnection} from '../../shared/utils/connection';
+import { BaseService, paginate } from '../../shared/base.service';
+import { SOL } from '../../shared/constants';
+import { PaginateResponse } from '../../shared/interface';
+import { getConnection } from '../../shared/utils/connection';
 import {
   addMongooseParam,
   escapeRegExp,
@@ -26,27 +26,27 @@ import {
   round,
   stringToUnit8Array,
 } from '../../shared/utils/helper';
-import {Instructions} from '../../shared/utils/instructions';
-import {ICampaign, IFee, IRate} from '../../shared/utils/interface';
-import {readPoolData} from '../../shared/utils/contract-main';
-import {PlatformService} from '../platform/platform.service';
-import {ClaimTokenHistory, ClaimTokenHistoryDocument} from './claimTokenHistory.schema';
-import {CreateClaimTokenHistoryDto} from './dto/claim-token-history.dto';
-import {CommitInitPoolDto, CreatePoolInput} from './dto/create-pool.dto';
-import {CreateJoinPoolHistory} from './dto/join-pool.dto';
+import { Instructions } from '../../shared/utils/instructions';
+import { ICampaign, IFee, IRate } from '../../shared/utils/interface';
+import { readPoolData } from '../../shared/utils/contract-main';
+import { PlatformService } from '../platform/platform.service';
+import { ClaimTokenHistory, ClaimTokenHistoryDocument } from './claimTokenHistory.schema';
+import { CreateClaimTokenHistoryDto } from './dto/claim-token-history.dto';
+import { CommitInitPoolDto, CreatePoolInput } from './dto/create-pool.dto';
+import { CreateJoinPoolHistory } from './dto/join-pool.dto';
 import {
   ChangePoolAdminInput,
   UpdateOffchainPoolInput,
   UpdateOnchainPoolInput,
 } from './dto/update-pool.dto';
-import {JoinPoolHistory, JoinPoolHistoryDocument} from './joinPoolHistory.schemal';
-import {PoolsFilterInput, PoolsVotingFilterInput, UserVoteDto} from './pools.dto';
-import {PoolsSectionFilter, PoolsVotingFilter} from './pools.enum';
-import {convertToContractAmount} from './pools.helper';
-import {IExtractRawPoolData} from './pools.interface';
-import {Pool, PoolDocument} from './pools.schema';
-import {Parser} from 'json2csv';
-import {Response} from 'express';
+import { JoinPoolHistory, JoinPoolHistoryDocument } from './joinPoolHistory.schemal';
+import { PoolsFilterInput, PoolsVotingFilterInput, UserVoteDto } from './pools.dto';
+import { PoolsSectionFilter, PoolsVotingFilter } from './pools.enum';
+import { convertToContractAmount } from './pools.helper';
+import { IExtractRawPoolData } from './pools.interface';
+import { Pool, PoolDocument } from './pools.schema';
+import { Parser } from 'json2csv';
+import { Response } from 'express';
 
 const connection = getConnection();
 
@@ -66,7 +66,7 @@ export class PoolsService extends BaseService<PoolDocument> {
     filters: PoolsFilterInput,
     address: string,
   ): Promise<PaginateResponse<PoolDocument>> {
-    const {search, page, limit, exceptPoolProgramId, poolProgramId} = filters;
+    const { search, page, limit, exceptPoolProgramId, poolProgramId } = filters;
     let docs: any[] = [];
 
     let options: any = {
@@ -109,7 +109,7 @@ export class PoolsService extends BaseService<PoolDocument> {
       };
     }
 
-    docs = await this.model.find(options, null, {limit, skip: limit * page}).sort({createdAt: -1});
+    docs = await this.model.find(options, null, { limit, skip: limit * page }).sort({ createdAt: -1 });
     const totalDocs = await this.model.count(options);
 
     return {
@@ -122,7 +122,7 @@ export class PoolsService extends BaseService<PoolDocument> {
   }
 
   public async index(filters?: PoolsFilterInput): Promise<PaginateResponse<PoolDocument>> {
-    const {search, section, walletAddress} = filters;
+    const { search, section, walletAddress } = filters;
     const page = filters.page ? parseInt(filters.page.toString()) : 0;
     const limit = filters.limit ? parseInt(filters.limit.toString()) : 10;
     let docs: any[] = [];
@@ -130,16 +130,16 @@ export class PoolsService extends BaseService<PoolDocument> {
     const request = [];
 
     const now = new Date();
-    query.pool_start = {$lte: now};
+    query.pool_start = { $lte: now };
 
     if (section === PoolsSectionFilter.JOINED && filters.walletAddress) {
       const listPools = await this.joinPool
-        .find({user_address: filters.walletAddress})
+        .find({ user_address: filters.walletAddress })
         .limit(limit)
         .skip(limit * page);
       const poolIds = listPools.map((e) => new ObjectId(e.pool_id.toString()));
-      const docs = await this.model.find({_id: {$in: poolIds}});
-      const paginated = this.paginate({page, limit, docs});
+      const docs = await this.model.find({ _id: { $in: poolIds } });
+      const paginated = this.paginate({ page, limit, docs });
       return paginated;
     }
 
@@ -149,13 +149,13 @@ export class PoolsService extends BaseService<PoolDocument> {
           query.$or = [
             {
               $and: [
-                {'data.version': {$lt: 4}},
-                {join_pool_start: {$gte: now}},
+                { 'data.version': { $lt: 4 } },
+                { join_pool_start: { $gte: now } },
                 {
                   $or: [
-                    {'data.is_active': false},
+                    { 'data.is_active': false },
                     {
-                      $and: [{'data.is_active': true}, {join_pool_start: {$gte: now}}],
+                      $and: [{ 'data.is_active': true }, { join_pool_start: { $gte: now } }],
                     },
                   ],
                 },
@@ -165,18 +165,18 @@ export class PoolsService extends BaseService<PoolDocument> {
               $or: [
                 {
                   $and: [
-                    {'data.version': {$gte: 4}},
-                    {'data.voting.is_active': false},
-                    {$or: [{join_pool_start: {$gte: now}}, {'data.is_active': false}]},
+                    { 'data.version': { $gte: 4 } },
+                    { 'data.voting.is_active': false },
+                    { $or: [{ join_pool_start: { $gte: now } }, { 'data.is_active': false }] },
                   ],
                 },
                 {
                   $and: [
-                    {'data.version': {$gte: 4}},
-                    {'data.voting.is_active': true},
-                    {'flags.is_ready': true},
-                    {join_pool_start: {$gte: now}},
-                    {'data.voting.end_at': {$lte: now}},
+                    { 'data.version': { $gte: 4 } },
+                    { 'data.voting.is_active': true },
+                    { 'flags.is_ready': true },
+                    { join_pool_start: { $gte: now } },
+                    { 'data.voting.end_at': { $lte: now } },
                   ],
                 },
               ],
@@ -185,28 +185,73 @@ export class PoolsService extends BaseService<PoolDocument> {
           break;
         case PoolsSectionFilter.FEATURED:
           query['data.is_active'] = true;
-          query.join_pool_start = {$lte: now};
-          query.join_pool_end = {$gte: now};
+          query.join_pool_start = { $lte: now };
+          query.join_pool_end = { $gte: now };
           break;
         case PoolsSectionFilter.PAST:
           query['data.is_active'] = true;
-          query.join_pool_end = {$lte: now};
+          query.join_pool_end = { $lte: now };
+          break;
+        case PoolsSectionFilter.UPCOMING_FEATURED:
+          query.$or = [
+            {
+              $and: [
+                { 'data.version': { $lt: 4 } },
+                { join_pool_start: { $gte: now } },
+                {
+                  $or: [
+                    { 'data.is_active': false },
+                    {
+                      $and: [{ 'data.is_active': true }, { join_pool_start: { $gte: now } }],
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              $or: [
+                {
+                  $and: [
+                    { 'data.version': { $gte: 4 } },
+                    { 'data.voting.is_active': false },
+                    { $or: [{ join_pool_start: { $gte: now } }, { 'data.is_active': false }] },
+                  ],
+                },
+                {
+                  $and: [
+                    { 'data.version': { $gte: 4 } },
+                    { 'data.voting.is_active': true },
+                    { 'flags.is_ready': true },
+                    { join_pool_start: { $gte: now } },
+                    { 'data.voting.end_at': { $lte: now } },
+                  ],
+                },
+              ],
+            },
+            {
+              $and: [
+                { 'data.is_active': true },
+                { join_pool_start: { $lte: now } },
+                { join_pool_end: { $gte: now } },
+              ]
+            }
+          ];
           break;
       }
     } else {
       query.$or = [
-        {'data.version': {$lt: 4}},
+        { 'data.version': { $lt: 4 } },
         {
           $or: [
             {
-              $and: [{'data.version': {$gte: 4}}, {'data.voting.is_active': false}],
+              $and: [{ 'data.version': { $gte: 4 } }, { 'data.voting.is_active': false }],
             },
             {
               $and: [
-                {'data.version': {$gte: 4}},
-                {'data.voting.is_active': true},
-                {$or: [{'flags.is_ready': true}]},
-                {'data.voting.end_at': {$lte: now}},
+                { 'data.version': { $gte: 4 } },
+                { 'data.voting.is_active': true },
+                { $or: [{ 'flags.is_ready': true }] },
+                { 'data.voting.end_at': { $lte: now } },
               ],
             },
           ],
@@ -221,48 +266,48 @@ export class PoolsService extends BaseService<PoolDocument> {
         .find(query)
         .limit(limit)
         .skip(page * limit)
-        .sort({createdAt: -1});
+        .sort({ createdAt: -1 });
     } else {
       docs = await this.model
         .find(query)
         .limit(limit)
         .skip(page * limit)
-        .sort({createdAt: -1});
+        .sort({ createdAt: -1 });
     }
     const totalDocs: number = await this.model.count(query);
-    const paginated = paginate({page, limit, docs, totalDocs});
+    const paginated = paginate({ page, limit, docs, totalDocs });
 
     return paginated;
   }
 
   async indexPoolsVoting(filters: PoolsVotingFilterInput): Promise<PaginateResponse<PoolDocument>> {
-    const {search, section} = filters;
+    const { search, section } = filters;
     const page = filters.page ? parseInt(filters.page.toString()) : 0;
     const limit = filters.limit ? parseInt(filters.limit.toString()) : 10;
     let docs: any[] = [];
     let query: any = {};
 
     const now = new Date();
-    query.pool_start = {$lte: now};
+    query.pool_start = { $lte: now };
     query['data.is_active'] = false;
-    query['data.version'] = {$gte: 4};
+    query['data.version'] = { $gte: 4 };
     // query.$and = [{'data.voting.end_at': {$lte: now}}, {'flags.is_ready': false}];
     query.$or = [
-      {'data.voting.end_at': {$gte: now}},
-      {$and: [{'data.voting.end_at': {$lt: now}}, {'flags.is_ready': false}]},
+      { 'data.voting.end_at': { $gte: now } },
+      { $and: [{ 'data.voting.end_at': { $lt: now } }, { 'flags.is_ready': false }] },
     ];
 
     switch (section) {
       case PoolsVotingFilter.UPCOMING:
         query['flags.is_ready'] = false;
-        query['data.voting.start_at'] = {$gte: now};
+        query['data.voting.start_at'] = { $gte: now };
         break;
       case PoolsVotingFilter.IN_VOTING:
-        query['data.voting.start_at'] = {$lte: now};
-        query['data.voting.end_at'] = {$gte: now};
+        query['data.voting.start_at'] = { $lte: now };
+        query['data.voting.end_at'] = { $gte: now };
         break;
       case PoolsVotingFilter.DEACTIVATED:
-        query['data.voting.end_at'] = {$lte: now};
+        query['data.voting.end_at'] = { $lte: now };
         query['flags.is_ready'] = false;
         break;
       default:
@@ -276,16 +321,16 @@ export class PoolsService extends BaseService<PoolDocument> {
         .find(query)
         .limit(limit)
         .skip(page * limit)
-        .sort({createdAt: -1});
+        .sort({ createdAt: -1 });
     } else {
       docs = await this.model
         .find(query)
         .limit(limit)
         .skip(page * limit)
-        .sort({createdAt: -1});
+        .sort({ createdAt: -1 });
     }
     const totalDocs: number = await this.model.count(query);
-    const paginated = paginate({page, limit, docs, totalDocs});
+    const paginated = paginate({ page, limit, docs, totalDocs });
 
     return paginated;
   }
@@ -422,8 +467,8 @@ export class PoolsService extends BaseService<PoolDocument> {
           poolData.campaign.early_join_phase.is_active
             ? poolData.campaign.early_join_phase.start_at
             : poolData.campaign.exclusive_phase.is_active
-            ? poolData.campaign.exclusive_phase.start_at
-            : poolData.campaign.public_phase.start_at,
+              ? poolData.campaign.exclusive_phase.start_at
+              : poolData.campaign.public_phase.start_at,
         ).getTime()
       ) {
         throw new BadRequestException('pool_start cannot greater than or equal join_pool_start');
@@ -436,7 +481,7 @@ export class PoolsService extends BaseService<PoolDocument> {
         lower: true,
       });
 
-      const {join_pool_start, join_pool_end} = getJoinPoolStartAndEndTimeV4(poolData);
+      const { join_pool_start, join_pool_end } = getJoinPoolStartAndEndTimeV4(poolData);
       const params = {
         ...input,
         pool_start,
@@ -451,8 +496,8 @@ export class PoolsService extends BaseService<PoolDocument> {
           is_ready:
             poolData.version >= 4
               ? new Date().getTime() > new Date(poolData.voting.end_at).getTime() &&
-                poolData.voting.total_vote_up - poolData.voting.total_vote_down >
-                  poolData.voting.required_absolute_vote
+              poolData.voting.total_vote_up - poolData.voting.total_vote_down >
+              poolData.voting.required_absolute_vote
               : true,
         },
       };
@@ -538,7 +583,7 @@ export class PoolsService extends BaseService<PoolDocument> {
 
     const poolData = await this.extractRawPoolData(pool.contract_address);
 
-    const {earlyJoinStartTime, earlyJoinEndTime, publicStartTime, publicEndTime, claimAt} =
+    const { earlyJoinStartTime, earlyJoinEndTime, publicStartTime, publicEndTime, claimAt } =
       this.validateAndGetPhasesTime(
         input.join_pool_start,
         input.join_pool_end,
@@ -565,7 +610,7 @@ export class PoolsService extends BaseService<PoolDocument> {
       tag_line,
       name,
       website,
-      token: {token_name, token_symbol},
+      token: { token_name, token_symbol },
       token_economic,
       twitter,
       telegram,
@@ -593,38 +638,38 @@ export class PoolsService extends BaseService<PoolDocument> {
       (poolData.campaign.early_join_phase.is_active
         ? poolData.campaign.early_join_phase.start_at
         : poolData.campaign.exclusive_phase.is_active
-        ? poolData.campaign.exclusive_phase.start_at
-        : poolData.campaign.public_phase.start_at)
+          ? poolData.campaign.exclusive_phase.start_at
+          : poolData.campaign.public_phase.start_at)
     ) {
       throw new BadRequestException('pool_start cannot greater than join_pool_start');
     }
 
     const updateQuery = {
-      ...(typeof logo === 'string' && {logo}),
-      ...(typeof thumbnail === 'string' && {thumbnail}),
-      ...(typeof tag_line === 'string' && {tag_line}),
-      ...(pool_start && {pool_start}),
-      ...(typeof name === 'string' && {name}),
-      ...(typeof website === 'string' && {website}),
-      ...(typeof audit_link === 'string' && {audit_link}),
-      ...{liquidity_percentage: liquidity_percentage || '0'},
-      ...(typeof token_economic === 'string' && {token_economic}),
-      ...(typeof twitter === 'string' && {twitter}),
-      ...(typeof telegram === 'string' && {telegram}),
-      ...(typeof name === 'string' && {name}),
-      ...(typeof medium === 'string' && {medium}),
-      ...(typeof description === 'string' && {description}),
-      ...(typeof token_name === 'string' && {'token.token_name': token_name}),
-      ...(typeof token_symbol === 'string' && {'token.token_symbol': token_symbol}),
+      ...(typeof logo === 'string' && { logo }),
+      ...(typeof thumbnail === 'string' && { thumbnail }),
+      ...(typeof tag_line === 'string' && { tag_line }),
+      ...(pool_start && { pool_start }),
+      ...(typeof name === 'string' && { name }),
+      ...(typeof website === 'string' && { website }),
+      ...(typeof audit_link === 'string' && { audit_link }),
+      ...{ liquidity_percentage: liquidity_percentage || '0' },
+      ...(typeof token_economic === 'string' && { token_economic }),
+      ...(typeof twitter === 'string' && { twitter }),
+      ...(typeof telegram === 'string' && { telegram }),
+      ...(typeof name === 'string' && { name }),
+      ...(typeof medium === 'string' && { medium }),
+      ...(typeof description === 'string' && { description }),
+      ...(typeof token_name === 'string' && { 'token.token_name': token_name }),
+      ...(typeof token_symbol === 'string' && { 'token.token_symbol': token_symbol }),
       ...(typeof slug === 'string' && {
         slug: slugify(input?.slug || `${input?.name}-${input?.token?.token_symbol}`, {
           lower: true,
         }),
       }),
-      ...(claimable_percentage && {claimable_percentage}),
+      ...(claimable_percentage && { claimable_percentage }),
     };
 
-    return this.model.findOneAndUpdate({_id: id}, updateQuery as any, {new: true});
+    return this.model.findOneAndUpdate({ _id: id }, updateQuery as any, { new: true });
   }
 
   public async createUpdatePoolTx(
@@ -779,7 +824,7 @@ export class PoolsService extends BaseService<PoolDocument> {
           tokenAccountX: new PublicKey(poolData.token_x),
           tokenAccountY: new PublicKey(poolData.token_y),
         },
-        {isActive: true},
+        { isActive: true },
         new PublicKey(poolProgramId),
       ),
     );
@@ -802,16 +847,16 @@ export class PoolsService extends BaseService<PoolDocument> {
   }
 
   public async delete(id: string) {
-    return this.model.deleteOne({_id: id});
+    return this.model.deleteOne({ _id: id });
   }
 
   public async isExisted(data: CreatePoolInput): Promise<boolean> {
     return this.model.exists({
       $or: [
-        {name: data.name},
-        {'token.token_symbol': data.token?.token_symbol},
-        {'token.token_address': data.token?.token_address},
-        {slug: data.slug},
+        { name: data.name },
+        { 'token.token_symbol': data.token?.token_symbol },
+        { 'token.token_address': data.token?.token_address },
+        { slug: data.slug },
       ],
     });
   }
@@ -996,18 +1041,18 @@ export class PoolsService extends BaseService<PoolDocument> {
     }
 
     return this.model.findOneAndUpdate(
-      {_id: id},
+      { _id: id },
       {
         data: poolData,
         join_pool_start,
         join_pool_end,
       },
-      {new: true},
+      { new: true },
     );
   }
 
   public async findOnePoolOrFailBySlug(slug: string) {
-    const pool = await this.model.findOne({slug});
+    const pool = await this.model.findOne({ slug });
     if (!pool) {
       throw new NotFoundException('Pool not found');
     }
@@ -1025,14 +1070,14 @@ export class PoolsService extends BaseService<PoolDocument> {
   }
 
   public async createJoinPoolHistory(input: CreateJoinPoolHistory): Promise<any> {
-    const pool = await this.model.findOne({contract_address: input.pool_address});
+    const pool = await this.model.findOne({ contract_address: input.pool_address });
     if (!pool) {
       return {
         success: false,
         message: 'Pool not found when join',
       };
     }
-    const dataInput = {...input, pool_id: pool._id};
+    const dataInput = { ...input, pool_id: pool._id };
 
     const updateSuccess = await this.joinPool.create(dataInput);
     return {
@@ -1081,7 +1126,7 @@ export class PoolsService extends BaseService<PoolDocument> {
       throw new BadRequestException('Pool address is required.');
     }
 
-    const joinPoolHistories = await this.joinPool.find({pool_address: poolAddress});
+    const joinPoolHistories = await this.joinPool.find({ pool_address: poolAddress });
 
     const data = joinPoolHistories.map((item) => ({
       user_address: item.user_address,
@@ -1105,7 +1150,7 @@ export class PoolsService extends BaseService<PoolDocument> {
       },
     ];
 
-    const json2csv = new Parser({fields});
+    const json2csv = new Parser({ fields });
     const csv = json2csv.parse(data);
     res.header('Content-Type', 'text/csv');
     res.attachment(`Join Pool History ${poolAddress}`);
@@ -1118,7 +1163,7 @@ export class PoolsService extends BaseService<PoolDocument> {
       const pool = await this.findOnePoolOrFailById(id);
       pool.data.voting.total_vote_up = params.total_vote_up;
       pool.data.voting.total_vote_down = params.total_vote_down;
-      console.log({oldPool: pool});
+      console.log({ oldPool: pool });
       if (
         params.total_vote_up - params.total_vote_down >=
         pool.data.voting.required_absolute_vote
@@ -1128,7 +1173,7 @@ export class PoolsService extends BaseService<PoolDocument> {
         pool.flags.is_ready = false;
       }
 
-      console.log({newPool: pool});
+      console.log({ newPool: pool });
 
       await pool.save();
       return true;

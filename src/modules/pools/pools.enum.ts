@@ -3,6 +3,7 @@ export enum PoolsSectionFilter {
   FEATURED = 'featured',
   JOINED = 'joined',
   PAST = 'past',
+  UPCOMING_FEATURED = 'upcoming_featured'
 }
 
 export enum PoolsVotingFilter {
