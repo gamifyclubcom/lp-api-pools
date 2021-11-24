@@ -62,7 +62,7 @@ export class WhitelistsController {
     operationId: 'indexWhitelistedUsers',
     summary: 'Index whitelisted users',
   })
-  @UseGuards(PoolOwnerQueryGuard)
+  // @UseGuards(PoolOwnerQueryGuard)
   async index(@Query() input: WhitelistsFilterInput) {
     return this.whitelistsService.index(input);
   }
