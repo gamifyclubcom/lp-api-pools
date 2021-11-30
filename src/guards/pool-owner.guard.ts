@@ -3,9 +3,9 @@ import {CanActivate, ExecutionContext, Injectable} from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
 import * as httpContext from 'express-http-context';
 import {isValidObjectId, PaginateModel} from 'mongoose';
-import {Pool, PoolDocument} from 'src/modules/pools/pools.schema';
-import {ADDRESS} from 'src/shared/constants';
-import {getConnection} from 'src/shared/utils/connection';
+import {Pool, PoolDocument} from '../modules/pools/pools.schema';
+import {ADDRESS} from '../shared/constants';
+import {getConnection} from '../shared/utils/connection';
 
 @Injectable()
 export class PoolOwnerGuard implements CanActivate {
