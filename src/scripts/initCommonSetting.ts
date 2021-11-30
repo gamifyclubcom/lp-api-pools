@@ -60,11 +60,11 @@ class Program {
       new PublicKey(stakeAdminAddress),
       10,
       4,
-      {        
+      {
         max_voting_days: 7,
         required_absolute_vote: 200,
         token_voting_power_rate: 100,
-        is_enabled: false
+        is_enabled: true,
       },
     );
 

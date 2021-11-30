@@ -1,9 +1,8 @@
 import {Actions, ICommonSetting} from '@gamify/onchain-program-sdk';
 import {CanActivate, ExecutionContext, Injectable} from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
-import {PublicKey} from '@solana/web3.js';
 import * as httpContext from 'express-http-context';
-import {PaginateModel} from 'mongoose';
+import {isValidObjectId, PaginateModel} from 'mongoose';
 import {Pool, PoolDocument} from '../modules/pools/pools.schema';
 import {ADDRESS} from '../shared/constants';
 import {getConnection} from '../shared/utils/connection';
@@ -18,16 +17,17 @@ export class PoolOwnerGuard implements CanActivate {
     }
 
     const poolId = context.switchToHttp().getRequest().params.id;
-    const pool = await this.model.findById(poolId);
+    let pool;
 
-    let commonSetting: ICommonSetting;
-    if (pool.data.version < 4) {
-      commonSetting = await new Actions(getConnection()).readCommonSettingByProgramId();
+    if (isValidObjectId(poolId)) {
+      pool = await this.model.findById(poolId);
     } else {
-      commonSetting = await new Actions(getConnection()).readCommonSettingByProgramId(
-        new PublicKey(pool.program_id),
-      );
+      pool = await this.model.findOne({pool_address: poolId});
     }
+
+    let commonSetting: ICommonSetting = await new Actions(
+      getConnection(),
+    ).readCommonSettingByProgramId();
     return pool?.data?.admins?.root_admin === address || address === (await commonSetting).admin;
   }
 }

@@ -12,9 +12,7 @@ import {AdminGuard} from '../../guards/admin.guard';
 import {ACCESS_TOKEN_HEADER_NAME} from '../../middlewares/auth.middleware';
 import {PoolFiltersValidationPipe} from '../../pipes/pool-filters.validation.pipe';
 import {CommitInitPoolDto} from './dto/create-pool.dto';
-import {
-  UpdateOffchainPoolInput,
-} from './dto/update-pool.dto';
+import {UpdateOffchainPoolInput} from './dto/update-pool.dto';
 import {
   IndexPoolsOutput,
   PoolDto,
@@ -83,7 +81,7 @@ export class PoolsAdminController {
     operationId: 'exportJoinPoolHistory',
     description: 'Export Join Pool History',
   })
-  @UseGuards(PoolOwnerGuard)
+  // @UseGuards(PoolOwnerGuard)
   @ApiProduces('application/octet-stream')
   async exportJoinPoolHistory(@Param('id') poolAddress: string, @Res() res: Response) {
     return this.poolsService.exportJoinPoolHistory(poolAddress, res);
