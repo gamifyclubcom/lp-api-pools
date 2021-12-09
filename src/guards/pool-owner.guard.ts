@@ -22,7 +22,7 @@ export class PoolOwnerGuard implements CanActivate {
     if (isValidObjectId(poolId)) {
       pool = await this.model.findById(poolId);
     } else {
-      pool = await this.model.findOne({pool_address: poolId});
+      pool = await this.model.findOne({contract_address: poolId});
     }
 
     let commonSetting: ICommonSetting = await new Actions(
