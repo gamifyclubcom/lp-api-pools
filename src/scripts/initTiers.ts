@@ -57,6 +57,7 @@ class Program {
       new PublicKey(CURRENT_POOL_PROGRAM_ID),
     );
     if (await connection.getAccountInfo(stakeAcc.publicKey)) {
+      console.log({stakeAccount: stakeAcc.publicKey.toString()})      
       const tier = await action.readTiers(stakeAcc.publicKey);
       console.log(tier);
       console.log(`Account has already init, try with other acc`);
