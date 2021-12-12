@@ -7,8 +7,12 @@ import {Platform, PlatformSchema} from '../platform/platform.schema';
 import {PlatformService} from '../platform/platform.service';
 import {PlatformModule} from '../platform/platform.module';
 import {PoolsAdminController} from './pools.admin.controller';
-import {JoinPoolHistory, JoinPoolHistorySchema} from './joinPoolHistory.schemal';
 import {ClaimTokenHistory, ClaimTokenHistorySchema} from './claimTokenHistory.schema';
+import {PoolParticipantsModule} from '../pool-participants/pool-participants.module';
+import {
+  JoinPoolHistory,
+  JoinPoolHistorySchema,
+} from '../pool-participants/join-pool-history.schema';
 
 @Module({
   imports: [
@@ -19,6 +23,7 @@ import {ClaimTokenHistory, ClaimTokenHistorySchema} from './claimTokenHistory.sc
       {name: ClaimTokenHistory.name, schema: ClaimTokenHistorySchema},
     ]),
     PlatformModule,
+    PoolParticipantsModule,
   ],
   controllers: [PoolsController, PoolsAdminController],
   providers: [PoolsService, PlatformService],
