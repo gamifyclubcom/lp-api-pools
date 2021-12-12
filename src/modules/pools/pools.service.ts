@@ -513,7 +513,11 @@ export class PoolsService extends BaseService<PoolDocument> {
         },
       };
 
-      return this.model.create(params);
+      const poolDocument = await this.model.create(params);
+
+      await this.addJobFinalizePool(poolDocument);
+
+      return poolDocument;
     } catch (e) {
       console.error(`Get pool data failed`, e);
       throw new BadRequestException(`Contract address is invalid`);
@@ -1051,7 +1055,7 @@ export class PoolsService extends BaseService<PoolDocument> {
       join_pool_end = time.join_pool_end;
     }
 
-    return this.model.findOneAndUpdate(
+    const poolUpdated = await this.model.findOneAndUpdate(
       {_id: id},
       {
         data: poolData,
@@ -1060,6 +1064,12 @@ export class PoolsService extends BaseService<PoolDocument> {
       },
       {new: true},
     );
+    // check joinPoolEnd change or not
+    if (new Date(join_pool_end).getTime() !== new Date(pool.join_pool_end).getTime()) {
+      await this.addJobFinalizePool(poolUpdated);
+    }
+
+    return poolUpdated;
   }
 
   public async findOnePoolOrFailBySlug(slug: string) {
