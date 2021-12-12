@@ -1185,10 +1185,6 @@ export class PoolsService extends BaseService<PoolDocument> {
   }
 
   addJobFinalizePool(pool: PoolDocument) {
-    if (Boolean(pool?.flags?.is_cron_running)) {
-      return;
-    }
-
     const cronName = uuid();
     console.log({cronName});
     const job = new CronJob(new Date(pool.join_pool_end), async () => {
@@ -1245,9 +1241,6 @@ export class PoolsService extends BaseService<PoolDocument> {
           return poolParticipantsDocs;
         }),
       );
-
-      pool.flags.is_cron_running = false;
-      pool = await pool.save();
     });
 
     this.schedulerRegistry.addCronJob(cronName, job);
