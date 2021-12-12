@@ -23,6 +23,7 @@ import {PoolsService} from '../pools/pools.service';
 import {CreateJoinPoolHistory, UpdateJoinPoolHistoryStatus} from './dto/join-pool-history.dto';
 import {JoinPoolHistoryRepository} from './join-pool-history.repository';
 import {JoinPoolStatusEnum} from './pool-participants.enum';
+import {IPoolParticipants} from './pool-participants.interface';
 import {PoolParticipantsRepository} from './pool-participants.repository';
 
 const connection = getConnection();
@@ -85,8 +86,21 @@ export class PoolParticipantsService {
     }
 
     const participants = await this.poolParticipantsRepository.find({pool_address: poolAddress});
+    let groupedData: IPoolParticipants[] = [];
+    participants.forEach((p) => {
+      const index = participants.findIndex(
+        (participant) => participant.user_address?.toString() === p.user_address?.toString(),
+      );
+      if (index < 0) {
+        groupedData.push(p);
+      } else {
+        groupedData[index].amount = new Decimal(groupedData[index].amount)
+          .plus(p.amount)
+          .toNumber();
+      }
+    });
 
-    const data = participants.map((item) => ({
+    const data = groupedData.map((item) => ({
       user_address: item.user_address,
       associated_address: item.participant_address,
       amount: item.amount,
