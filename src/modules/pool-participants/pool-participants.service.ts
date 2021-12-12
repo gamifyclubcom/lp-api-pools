@@ -73,6 +73,7 @@ export class PoolParticipantsService {
         limit: params.limit,
         user_address: params.user_address,
         pool_address: params.pool_address,
+        status: {$ne: JoinPoolStatusEnum.Failed},
       },
       needAll,
     );
