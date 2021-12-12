@@ -88,7 +88,7 @@ export class PoolParticipantsService {
     const participants = await this.poolParticipantsRepository.find({pool_address: poolAddress});
     let groupedData: IPoolParticipants[] = [];
     participants.forEach((p) => {
-      const index = participants.findIndex(
+      const index = groupedData.findIndex(
         (participant) => participant.user_address?.toString() === p.user_address?.toString(),
       );
       if (index < 0) {
