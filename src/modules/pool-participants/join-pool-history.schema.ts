@@ -1,8 +1,7 @@
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
-import {Document} from 'mongoose';
-import * as MongooseFuzzySearching from 'mongoose-fuzzy-searching';
-import {BaseDocument, EmbeddedDocument} from '../../shared/base.document';
-import {IToken} from './pools.interface';
+import * as MongoosePaginate from 'mongoose-paginate-v2';
+import {BaseDocument} from '../../shared/base.document';
+import {JoinPoolStatusEnum} from './pool-participants.enum';
 
 export type JoinPoolHistoryDocument = JoinPoolHistory & BaseDocument;
 
@@ -22,6 +21,11 @@ export class JoinPoolHistory {
 
   @Prop({required: true})
   amount: number;
+
+  @Prop({required: false, type: JoinPoolStatusEnum})
+  status?: JoinPoolStatusEnum;
 }
 
-export const JoinPoolHistorySchema = SchemaFactory.createForClass(JoinPoolHistory).index({name: 1});
+export const JoinPoolHistorySchema = SchemaFactory.createForClass(JoinPoolHistory)
+  .index({name: 1})
+  .plugin(MongoosePaginate);

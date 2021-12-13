@@ -1,6 +1,6 @@
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
 import {Document} from 'mongoose';
-import {BaseDocument, EmbeddedDocument} from 'src/shared/base.document';
+import {BaseDocument, EmbeddedDocument} from '../../shared/base.document';
 import {UserStakeActionType} from './constants';
 
 export type UserStakeHistoryDocument = UserStakeHistory & BaseDocument;
