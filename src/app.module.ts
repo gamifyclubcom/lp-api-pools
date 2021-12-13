@@ -2,6 +2,7 @@ import {MiddlewareConsumer, Module, NestModule, RequestMethod} from '@nestjs/com
 import {MongooseModule} from '@nestjs/mongoose';
 import {ConfigModule} from '@nestjs/config';
 import {LoggerModule} from 'nestjs-pino';
+import {ScheduleModule} from '@nestjs/schedule';
 import {ThrottlerModule} from '@nestjs/throttler';
 import pino from 'pino';
 
@@ -46,6 +47,7 @@ mongoose.set('debug', process.env.MONGO_DEBUG);
       useCreateIndex: true,
       useFindAndModify: false,
     }),
+    ScheduleModule.forRoot(),
     PlatformModule,
     UserModule,
     AuthModule,

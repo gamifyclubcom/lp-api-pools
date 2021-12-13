@@ -264,6 +264,18 @@ export class Flags {
    */
   @Prop({type: Boolean})
   is_ready: boolean;
+
+  /**
+   * Check pool is finalize participants or not
+   */
+  @Prop({type: Boolean, default: false})
+  is_finalize_participants: boolean;
+
+  /**
+   * Check cron finalize participants is running or not
+   */
+  @Prop({type: Boolean, default: false})
+  is_cron_running: boolean;
 }
 
 @Schema({timestamps: true})
