@@ -493,6 +493,21 @@ export class PoolsService extends BaseService<PoolDocument> {
       });
 
       const {join_pool_start, join_pool_end} = getJoinPoolStartAndEndTimeV4(poolData);
+      let is_ready: boolean = true;
+      if (
+        poolData.version >= 4 &&
+        new Date().getTime() > new Date(poolData.voting.end_at).getTime()
+      ) {
+        if (poolData.voting.required_absolute_vote <= 0) {
+          is_ready = true;
+        } else {
+          is_ready = Boolean(
+            new Decimal(poolData.voting.total_vote_up || 0)
+              .minus(poolData.voting.total_vote_down || 0)
+              .greaterThanOrEqualTo(poolData.voting.required_absolute_vote || 0),
+          );
+        }
+      }
       const params = {
         ...input,
         pool_start,
@@ -504,12 +519,7 @@ export class PoolsService extends BaseService<PoolDocument> {
         join_pool_end,
         token_to_decimal: tokenToDecimals,
         flags: {
-          is_ready:
-            poolData.version >= 4
-              ? new Date().getTime() > new Date(poolData.voting.end_at).getTime() &&
-                poolData.voting.total_vote_up - poolData.voting.total_vote_down >
-                  poolData.voting.required_absolute_vote
-              : true,
+          is_ready,
         },
       };
 
