@@ -12,7 +12,7 @@ import {
   SaveOptions,
   Schema,
 } from 'mongoose';
-import {paginationConfig} from 'src/configs';
+import {paginationConfig} from '../configs';
 import {convertObject} from './helper';
 import {PaginateQuery} from './interface';
 

@@ -1,6 +1,6 @@
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
 import * as MongoosePaginate from 'mongoose-paginate-v2';
-import {BaseDocument} from 'src/shared/base.document';
+import {BaseDocument} from '../../shared/base.document';
 import {JoinPoolStatusEnum} from './pool-participants.enum';
 
 export type JoinPoolHistoryDocument = JoinPoolHistory & BaseDocument;

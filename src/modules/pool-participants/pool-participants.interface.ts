@@ -1,4 +1,4 @@
-import {BaseDocument} from 'src/shared/base.document';
+import {BaseDocument} from '../../shared/base.document';
 import {JoinPoolStatusEnum} from './pool-participants.enum';
 
 export class IPoolParticipants extends BaseDocument {

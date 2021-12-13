@@ -1,6 +1,6 @@
 import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
 import {IsEnum, IsNotEmpty, IsOptional, IsString} from 'class-validator';
-import {PaginateQuery} from 'src/shared/interface';
+import {PaginateQuery} from '../../../shared/interface';
 import {JoinPoolStatusEnum} from '../pool-participants.enum';
 
 export class CreateJoinPoolHistory {

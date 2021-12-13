@@ -1,7 +1,7 @@
 import {Injectable, OnApplicationBootstrap} from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
 import {PaginateModel} from 'mongoose';
-import {BaseRepository} from 'src/shared/mongoose';
+import {BaseRepository} from '../../shared/mongoose';
 import {IPoolParticipants} from './pool-participants.interface';
 import {PoolParticipants} from './pool-participants.schema';
 
