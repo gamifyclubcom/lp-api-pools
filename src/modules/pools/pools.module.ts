@@ -13,6 +13,7 @@ import {
   JoinPoolHistory,
   JoinPoolHistorySchema,
 } from '../pool-participants/join-pool-history.schema';
+import {PoolCron} from './pool.cron';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import {
     PoolParticipantsModule,
   ],
   controllers: [PoolsController, PoolsAdminController],
-  providers: [PoolsService, PlatformService],
+  providers: [PoolsService, PlatformService, PoolCron],
   exports: [PoolsService],
 })
 export default class PoolsModule {}
