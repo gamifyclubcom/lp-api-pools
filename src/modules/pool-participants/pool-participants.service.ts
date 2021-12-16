@@ -85,7 +85,10 @@ export class PoolParticipantsService {
       throw new BadRequestException('Pool address is required.');
     }
 
-    const participants = await this.poolParticipantsRepository.find({pool_address: poolAddress});
+    const participants = await this.joinPoolHistoryRepository.find({
+      pool_address: poolAddress,
+      status: JoinPoolStatusEnum.Succeeded,
+    });
     let groupedData: IPoolParticipants[] = [];
     participants.forEach((p) => {
       const index = groupedData.findIndex(
@@ -135,8 +138,9 @@ export class PoolParticipantsService {
       throw new BadRequestException('Pool address is required.');
     }
 
-    const currentVerified = await this.poolParticipantsRepository.count({
+    const currentVerified = await this.joinPoolHistoryRepository.count({
       pool_address: poolAddress,
+      status: JoinPoolStatusEnum.Succeeded,
     });
 
     let poolFullInfo:

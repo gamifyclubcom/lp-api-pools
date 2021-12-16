@@ -1209,48 +1209,52 @@ export class PoolsService extends BaseService<PoolDocument> {
 
       await Promise.all(
         joinPoolHistoryPending.map(async (history) => {
-          const {exists, associatedAddress} = await this.actions.getPoolAssociatedAccountInfo(
+          const {exists} = await this.actions.getPoolAssociatedAccountInfo(
             new PublicKey(history.user_address),
             new PublicKey(history.pool_address),
           );
 
           if (!exists) {
             history.status = JoinPoolStatusEnum.Failed;
-            await history.save();
-            return null;
+          } else {
+            history.status = JoinPoolStatusEnum.Succeeded;
           }
 
-          history.status = JoinPoolStatusEnum.Succeeded;
-          await history.save();
+          history = await history.save();
+          return history;
 
-          let poolParticipantsDocs = await this.poolParticipantsRepository.findOne({
-            user_address: history.user_address,
-            pool_address: history.pool_address,
-          });
+          // let poolParticipantsDocs = await this.poolParticipantsRepository.findOne({
+          //   user_address: history.user_address,
+          //   pool_address: history.pool_address,
+          // });
 
-          if (!poolParticipantsDocs) {
-            return this.poolParticipantsRepository.create({
-              pool_id: history.pool_id,
-              participant_address: associatedAddress.toString(),
-              user_address: history.user_address,
-              pool_address: history.pool_address,
-              amount: history.amount,
-              join_pool_history_id: [history._id.toString()],
-            });
-          }
+          // if (!poolParticipantsDocs) {
+          //   return this.poolParticipantsRepository.create({
+          //     pool_id: history.pool_id,
+          //     participant_address: associatedAddress.toString(),
+          //     user_address: history.user_address,
+          //     pool_address: history.pool_address,
+          //     amount: history.amount,
+          //     join_pool_history_id: [history._id.toString()],
+          //   });
+          // }
 
-          poolParticipantsDocs.join_pool_history_ids = [
-            ...poolParticipantsDocs.join_pool_history_ids,
-            history._id.toString(),
-          ];
-          poolParticipantsDocs.amount = new Decimal(poolParticipantsDocs.amount)
-            .plus(history.amount)
-            .toNumber();
-          poolParticipantsDocs = await poolParticipantsDocs.save();
+          // poolParticipantsDocs.join_pool_history_ids = [
+          //   ...poolParticipantsDocs.join_pool_history_ids,
+          //   history._id.toString(),
+          // ];
+          // poolParticipantsDocs.amount = new Decimal(poolParticipantsDocs.amount)
+          //   .plus(history.amount)
+          //   .toNumber();
+          // poolParticipantsDocs = await poolParticipantsDocs.save();
 
-          return poolParticipantsDocs;
+          // return poolParticipantsDocs;
         }),
       );
+
+      pool.flags.is_finalize_participants = true;
+      pool.flags.is_cron_running = false;
+      pool = await pool.save();
     });
 
     this.schedulerRegistry.addCronJob(cronName, job);
